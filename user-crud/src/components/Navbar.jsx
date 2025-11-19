@@ -4,21 +4,15 @@ import "./Navbar.css";
 
 const Navbar = () => {
   return (
-    <header>
-      <div class="container">
-        <div id="logo">User Management App</div>
-        <nav>
-          <ul class="nav-links">
-            <li>
-              <a href="#">Home</a>
-            </li>
-            <li>
-              <a href="#">Create User</a>
-            </li>
-          </ul>
+    <div className="navbar">
+      <div className="navbar-container">
+        <div className="left">User Management Application</div>
+
+        <nav className="nav">
+          <Link to="/">Home</Link>
         </nav>
       </div>
-    </header>
+    </div>
   );
 };
 

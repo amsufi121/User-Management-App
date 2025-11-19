@@ -1,44 +1,47 @@
-.container {
+.navbar {
+  width: 100%;
+  background: #2563eb;
+  color: #fff;
+  padding: 12px 0; /* remove left-right padding from outer container */
+}
+
+/* center container */
+.navbar-container {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  overflow: hidden;
+  margin: 0 auto; /* center horizontally */
+  padding: 0 20px; /* small inner padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-header {
-  background-color: #0d3131;
-  color: #fff;
-  padding: 10px 0;
+.left {
+  font-size: 18px;
+  font-weight: 700;
 }
 
-#logo {
-  float: left;
-  font-size: 1.5em;
+.nav {
+  display: flex;
+  gap: 14px;
 }
 
-nav {
-  float: right;
-}
-
-.nav-links {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-links li {
-  display: inline-block;
-  margin-left: 20px;
-}
-
-.nav-links li a {
-  color: #fff;
+/* nav button styles */
+.nav a {
   text-decoration: none;
-  padding: 10px 15px;
-  display: inline-block;
-  transition: background-color 0.3s;
+  color: white;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  font-size: 15px;
+  transition: 0.2s ease;
 }
 
-.nav-links li a:hover {
-  background-color: #555;
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.nav a.active {
+  background: white;
+  color: #2563eb;
+  font-weight: 600;
 }
