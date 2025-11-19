@@ -7,7 +7,7 @@ const emptyForm = {
   username: "",
   email: "",
   street: "",
-
+  suite: "",
   city: "",
   zipcode: "",
 };
@@ -15,23 +15,37 @@ const emptyForm = {
 const CreateUser = ({ initialData = null, onSave, onCancel }) => {
   const [form, setForm] = useState(emptyForm);
 
-  // populate when editingUser changes
+  // populate only when id changes (prevents repeated resets)
   useEffect(() => {
-    if (initialData) {
-      setForm({
+    if (!initialData) {
+      setForm(emptyForm);
+      return;
+    }
+
+    // shallow update only if needed
+    setForm((prev) => {
+      const needUpdate =
+        prev.id !== initialData.id ||
+        prev.name !== (initialData.name || "") ||
+        prev.username !== (initialData.username || "") ||
+        prev.email !== (initialData.email || "") ||
+        prev.street !== (initialData.street || "") ||
+        prev.city !== (initialData.city || "") ||
+        prev.zipcode !== (initialData.zipcode || "");
+      if (!needUpdate) return prev;
+
+      return {
         id: initialData.id,
         name: initialData.name || "",
         username: initialData.username || "",
         email: initialData.email || "",
         street: initialData.street || "",
-
+        suite: initialData.suite || "",
         city: initialData.city || "",
         zipcode: initialData.zipcode || "",
-      });
-    } else {
-      setForm(emptyForm);
-    }
-  }, [initialData]);
+      };
+    });
+  }, [initialData?.id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,8 +54,6 @@ const CreateUser = ({ initialData = null, onSave, onCancel }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // basic validation
     const requiredFields = [
       "name",
       "username",
@@ -57,13 +69,7 @@ const CreateUser = ({ initialData = null, onSave, onCancel }) => {
       }
     }
 
-    // pass to parent
-    if (onSave) {
-      // send a shallow copy (so parent can add id if needed)
-      onSave({ ...form });
-    }
-
-    // reset handled by parent closing modal, but keep safe fallback
+    if (onSave) onSave({ ...form });
     setForm(emptyForm);
   };
 
@@ -123,7 +129,8 @@ const CreateUser = ({ initialData = null, onSave, onCancel }) => {
           <button type="submit">
             {isEdit ? "Save Changes" : "Create User"}
           </button>
-          <button type="button" onClick={onCancel}>
+          {/* explicit type and safe onClick */}
+          <button type="button" onClick={() => onCancel && onCancel()}>
             Cancel
           </button>
         </div>

@@ -22,13 +22,14 @@ const UserDetail = () => {
   }
 
   const handleEdit = (user) => {
+    //edit user
+    console.log("handleEdit called:", user?.id);
     const flat = {
       id: user.id,
       name: user.name || "",
       username: user.username || "",
       email: user.email || "",
       street: user.address?.street ?? user.street ?? "",
-
       city: user.address?.city ?? user.city ?? "",
       zipcode: user.address?.zipcode ?? user.zipcode ?? "",
     };
@@ -37,12 +38,15 @@ const UserDetail = () => {
   };
 
   const handleDelete = (id) => {
+    //to delete user
+    console.log("handleDelete called:", id);
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     setUsers((prev) => prev.filter((u) => u.id !== id));
   };
 
   const handleSave = (savedUser) => {
-    // update existing (if id present)
+    //to save form data
+    console.log("handleSave:", savedUser);
     if (savedUser.id) {
       setUsers((prev) =>
         prev.map((u) =>
@@ -55,7 +59,6 @@ const UserDetail = () => {
                 address: {
                   ...(u.address || {}),
                   street: savedUser.street,
-
                   city: savedUser.city,
                   zipcode: savedUser.zipcode,
                 },
@@ -64,7 +67,6 @@ const UserDetail = () => {
         )
       );
     } else {
-      // create new
       const newId = users.length ? Math.max(...users.map((u) => u.id)) + 1 : 1;
       const newUser = {
         id: newId,
@@ -73,7 +75,6 @@ const UserDetail = () => {
         email: savedUser.email,
         address: {
           street: savedUser.street,
-
           city: savedUser.city,
           zipcode: savedUser.zipcode,
         },
@@ -81,33 +82,31 @@ const UserDetail = () => {
       setUsers((prev) => [newUser, ...prev]);
     }
 
-    // close modal & clear editing user
     setShowForm(false);
     setEditingUser(null);
   };
 
   const handleCreateNew = () => {
+    console.log("handleCreateNew called");
     setEditingUser(null);
     setShowForm(true);
   };
 
   const handleCancel = () => {
+    console.log("handleCancel called");
     setShowForm(false);
     setEditingUser(null);
   };
 
   return (
     <div className="container">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 16,
-        }}
-      >
+      <div className="title">
         <h1>User List</h1>
-        <button className="create-new-btn" onClick={handleCreateNew}>
+        <button
+          type="button"
+          className="create-new-btn"
+          onClick={handleCreateNew}
+        >
           Create New
         </button>
       </div>
@@ -115,42 +114,51 @@ const UserDetail = () => {
       {users.length === 0 ? (
         <p>No users found.</p>
       ) : (
-        users.map((user) => (
-          <div key={user.id} className="user-card">
-            <h2>{user.name}</h2>
-            <p>
-              <strong>Username:</strong> {user.username}
-            </p>
-            <p>
-              <strong>Email:</strong> {user.email}
-            </p>
+        <div className="cards-grid">
+          {users.map((user) => (
+            <div key={user.id} className="user-card">
+              <div className="content">
+                <h2>{user.name}</h2>
+                <p>
+                  <strong>Username:</strong> {user.username}
+                </p>
+                <p>
+                  <strong>Email:</strong> {user.email}
+                </p>
 
-            <div className="address-box">
-              <h4>Address</h4>
-              <p>
-                <strong>Street:</strong> {user.address?.street ?? ""}
-              </p>
-              <p>
-                <strong>City:</strong> {user.address?.city ?? ""}
-              </p>
-              <p>
-                <strong>Zipcode:</strong> {user.address?.zipcode ?? ""}
-              </p>
-            </div>
+                <div className="address-box">
+                  <h4>Address</h4>
+                  <p>
+                    <strong>Street:</strong> {user.address?.street ?? ""}
+                  </p>
+                  <p>
+                    <strong>City:</strong> {user.address?.city ?? ""}
+                  </p>
+                  <p>
+                    <strong>Zipcode:</strong> {user.address?.zipcode ?? ""}
+                  </p>
+                </div>
+              </div>
 
-            <div className="card-actions">
-              <button className="edit-btn" onClick={() => handleEdit(user)}>
-                Edit
-              </button>
-              <button
-                className="delete-btn"
-                onClick={() => handleDelete(user.id)}
-              >
-                Delete
-              </button>
+              <div className="card-actions">
+                <button
+                  type="button"
+                  className="edit-btn"
+                  onClick={() => handleEdit(user)}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="delete-btn"
+                  onClick={() => handleDelete(user.id)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
 
       {showForm && (
